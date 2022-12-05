@@ -1,0 +1,9 @@
+
+*.vsidx
+.vs/openGL_TeamProject/v17/.suo
+*.db
+*.ipch
+*.json
+.vs/openGL_TeamProject/v17/.wsuo
+*.sqlite
+*.lock
