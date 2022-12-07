@@ -1,5 +1,6 @@
 #include "shader.h"
 #include "GameFramework.h"
+#include "ObjReader.h"
 
 void InitBuffer();
 GLvoid drawScene();
@@ -9,27 +10,15 @@ void Keyboard(unsigned char key, int x, int y);
 
 GLuint VAO, VBO_position, VBO_color;
 
-// 삼각형 꼭지점 좌표값
-const GLfloat triShape[3][3] =
-{
-	{-0.5,-0.5, 0.0 },
-	{ 0.5,-0.5, 0.0 },
-	{ 0.0, 0.5, 0.0 }
-};
+objRead obj;
 
-// 삼각형 꼭지점 색상
-const GLfloat colors[3][3] =
-{
-	{ 1.0, 0.0, 0.0 },
-	{ 0.0, 1.0, 0.0 },
-	{ 0.0, 0.0, 1.0 }
-};
-
-int polygon_mode = 2;
+int polygon_mode = 1;
 
 
 void main(int argc, char** argv)
 {
+	obj.loadObj_normalize_center("TigerII.obj");
+
 	// 윈도우 생성
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
@@ -63,7 +52,7 @@ void InitBuffer()
 
 	glGenBuffers(1, &VBO_position);												//--- VBO position 객체 생성
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_position);								//--- vertex positions 저장을 위한 VBO 바인딩
-	glBufferData(GL_ARRAY_BUFFER, sizeof(triShape), triShape, GL_STATIC_DRAW);	//--- vertex positions 데이터 입력
+	glBufferData(GL_ARRAY_BUFFER, obj.outvertex.size() * sizeof(glm::vec3),&obj.outvertex[0], GL_STATIC_DRAW);	//--- vertex positions 데이터 입력
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);		//--- 좌표값을 attribute 인덱스 0번에 명시한다: 버텍스 당 3* float
 	glEnableVertexAttribArray(0);												//--- attribute 인덱스 0번을 사용가능하게 함
 
