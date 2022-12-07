@@ -7,3 +7,6 @@
 .vs/openGL_TeamProject/v17/.wsuo
 *.sqlite
 *.lock
+*.vcxproj
+*.user
+*.vcxproj
