@@ -21,3 +21,13 @@
 *.exe
 *.idb
 *.vcxproj
+Debug/main.obj
+Debug/GameFramework.obj
+Debug/ObjReader.obj
+Debug/Object.obj
+Debug/Scene.obj
+x64/Debug/GameFramework.obj
+x64/Debug/Object.obj
+x64/Debug/main.obj
+x64/Debug/ObjReader.obj
+x64/Debug/Scene.obj
