@@ -12,3 +12,12 @@
 *.vcxproj
 *.log
 *.vcxproj
+*.bin
+*.tlog
+*.ilk
+*.txt
+*.pdb
+*.recipe
+*.exe
+*.idb
+*.vcxproj
