@@ -20,7 +20,7 @@ glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 void main(int argc, char** argv)
 {
-	obj.loadObj_normalize_center("TigerII.obj");
+	obj.loadObj_normalize_center("pyramid.obj");
 
 	// 윈도우 생성
 	glutInit(&argc, argv);
