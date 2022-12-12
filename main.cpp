@@ -19,9 +19,6 @@ glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 5.0f); //--- 카메라 위치
 glm::vec3 cameraDirection = glm::vec3(0.0f, 0.0f, 0.0f); //--- 카메라 바라보는 방향
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
-float rotate_degree = 0.0f;
-float t_x{ 0.0 }, t_y{ 0.0 }, t_z{ 0.0 };
-
 void main(int argc, char** argv)
 {
 	obj.loadObj_normalize_center("pyramid.obj");
@@ -68,7 +65,7 @@ void InitBuffer()
 
 GLvoid drawScene()
 {
-	GLfloat rColor = 1.0f, gColor = 1.0f, bColor = 1.0f;
+	GLfloat rColor = 0.8f, gColor = 0.8f, bColor = 0.8f;
 
 	glClearColor(rColor, gColor, bColor, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -101,22 +98,13 @@ GLvoid drawScene()
 	unsigned int projectionLocation = glGetUniformLocation(shaderProgramID, "projection"); //--- 투영 변환 값 설정
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
 
-	glm::mat4 TR = glm::mat4(1.0f);
-	glm::mat4 Ry = glm::mat4(1.0f);
-	glm::mat4 Sc = glm::mat4(1.0f);
-	glm::mat4 Tr = glm::mat4(1.0f);
-
-	Ry = glm::rotate(Ry, glm::radians(rotate_degree), glm::vec3(0.0, 1.0, 0.0));
-	Tr = glm::translate(Tr, glm::vec3(t_x, t_y, t_z));
-	Sc = glm::scale(Sc, glm::vec3(1.0, 1.0, 1.0));
-
-	TR = Tr * Ry;
+	
 	unsigned int modelLocation = glGetUniformLocation(shaderProgramID, "model");
 	//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(TR));
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(gameframework.player->world));
+	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(gameframework.player->Get_worldTR()));
 
 	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, obj.outvertex.size());
 
 	glutSwapBuffers();
 }
@@ -130,10 +118,10 @@ void Keyboard(unsigned char key, int x, int y)
 {
 	switch (key) {
 	case 'w': case 'W': //Advance
-		
+		gameframework.player->Translate(glm::vec3(0.0f, 0.0f, -0.5f));
 		break;
 	case 's': case 'S': //backwards
-
+		gameframework.player->Translate(glm::vec3(0.0f, 0.0f, 0.5f));
 		break;
 	case 'a': case 'A': //Rotate left
 		gameframework.player->Rotate(glm::vec3(0.0f, 1.0f, 0.0f), 20);
