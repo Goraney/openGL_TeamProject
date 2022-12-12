@@ -7,8 +7,8 @@ public:
 	Object();
 	~Object();
 
-	void Rotate();
-	void Move();
+	virtual void Rotate(glm::vec3 axis, float angle);
+	virtual void Move();
 
 	virtual void Animate();
 
@@ -17,18 +17,21 @@ public:
 
 	glm::mat4 world;
 
-	glm::vec3 position;
-	glm::vec3 look;
-	glm::vec3 up;
-	glm::vec3 right;
+	//glm::vec4 position;
+	//glm::vec4 look;
+	//glm::vec4 up;
+	//glm::vec4 right;
 
 };
 
-class Player : Object
+class Player : public Object
 {
 public:
 	Player();
 	~Player();
+
+	//virtual void Rotate(glm::vec3 axis, float angle);
+	//virtual void Move();
 
 	virtual void Animate();
 };

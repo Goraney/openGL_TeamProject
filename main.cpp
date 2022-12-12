@@ -7,6 +7,7 @@ GLvoid drawScene();
 GLvoid Reshape(int w, int h);
 void Keyboard(unsigned char key, int x, int y);
 
+GameFramework gameframework;
 
 GLuint VAO, VBO_position, VBO_color;
 
@@ -24,6 +25,8 @@ float t_x{ 0.0 }, t_y{ 0.0 }, t_z{ 0.0 };
 void main(int argc, char** argv)
 {
 	obj.loadObj_normalize_center("pyramid.obj");
+
+	gameframework.OnCreate();
 
 	// 윈도우 생성
 	glutInit(&argc, argv);
@@ -109,7 +112,8 @@ GLvoid drawScene()
 
 	TR = Tr * Ry;
 	unsigned int modelLocation = glGetUniformLocation(shaderProgramID, "model");
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(TR));
+	//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(TR));
+	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(gameframework.player->world));
 
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -126,12 +130,16 @@ void Keyboard(unsigned char key, int x, int y)
 {
 	switch (key) {
 	case 'w': case 'W': //Advance
+		
 		break;
 	case 's': case 'S': //backwards
+
 		break;
 	case 'a': case 'A': //Rotate left
+		gameframework.player->Rotate(glm::vec3(0.0f, 1.0f, 0.0f), 20);
 		break;
 	case 'd': case 'D': //Rotate right
+		gameframework.player->Rotate(glm::vec3(0.0f, 1.0f, 0.0f), -20);
 		break;
 	}
 
