@@ -18,6 +18,9 @@ glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 5.0f); //--- 카메라 위치
 glm::vec3 cameraDirection = glm::vec3(0.0f, 0.0f, 0.0f); //--- 카메라 바라보는 방향
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
+float rotate_degree = 0.0f;
+float t_x{ 0.0 }, t_y{ 0.0 }, t_z{ 0.0 };
+
 void main(int argc, char** argv)
 {
 	obj.loadObj_normalize_center("pyramid.obj");
@@ -100,8 +103,8 @@ GLvoid drawScene()
 	glm::mat4 Sc = glm::mat4(1.0f);
 	glm::mat4 Tr = glm::mat4(1.0f);
 
-	Ry = glm::rotate(Ry, glm::radians(0.0f), glm::vec3(0.0, 1.0, 0.0));
-	Tr = glm::translate(Tr, glm::vec3(0.0, 0.0, 0.0));
+	Ry = glm::rotate(Ry, glm::radians(rotate_degree), glm::vec3(0.0, 1.0, 0.0));
+	Tr = glm::translate(Tr, glm::vec3(t_x, t_y, t_z));
 	Sc = glm::scale(Sc, glm::vec3(1.0, 1.0, 1.0));
 
 	TR = Tr * Ry;
@@ -121,10 +124,16 @@ GLvoid Reshape(int w, int h)
 
 void Keyboard(unsigned char key, int x, int y)
 {
-	if (key == '1')
-		polygon_mode = 1;
-	else if (key == '2')
-		polygon_mode = 2;
+	switch (key) {
+	case 'w': case 'W': //Advance
+		break;
+	case 's': case 'S': //backwards
+		break;
+	case 'a': case 'A': //Rotate left
+		break;
+	case 'd': case 'D': //Rotate right
+		break;
+	}
 
 	glutPostRedisplay();
 }
