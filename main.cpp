@@ -6,6 +6,7 @@ void InitBuffer();
 GLvoid drawScene();
 GLvoid Reshape(int w, int h);
 void Keyboard(unsigned char key, int x, int y);
+void Special(int key, int x, int y);
 
 GameFramework gameframework;
 
@@ -44,7 +45,7 @@ void main(int argc, char** argv)
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
-
+	glutSpecialFunc(Special);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	// 메인 루프
@@ -128,6 +129,44 @@ void Keyboard(unsigned char key, int x, int y)
 		break;
 	case 'd': case 'D': //Rotate right
 		gameframework.player->Rotate(glm::vec3(0.0f, 1.0f, 0.0f), -20);
+		break;
+	case 'i': case 'I':
+		cameraPos[2] -= 0.2;
+		break;
+	case 'k': case 'K':
+		cameraPos[2] += 0.2;
+		break;
+	case 'j': case 'J':
+		cameraPos[0] -= 0.2;
+		break;
+	case 'l': case 'L':
+		cameraPos[0] += 0.2;
+		break;
+	case 'n': case 'N':
+		cameraPos[1] += 0.2;
+		break;
+	case 'm': case 'M':
+		cameraPos[1] -= 0.2;
+		break;
+	}
+
+	glutPostRedisplay();
+}
+
+void Special(int key, int x, int y) 
+{
+	switch (key) {
+	case GLUT_KEY_UP:
+		cameraDirection[1] += 0.2;
+		break;
+	case GLUT_KEY_DOWN:
+		cameraDirection[1] -= 0.2;
+		break;
+	case GLUT_KEY_LEFT:
+		cameraDirection[0] -= 0.2;
+		break;
+	case GLUT_KEY_RIGHT:
+		cameraDirection[0] += 0.2;
 		break;
 	}
 
