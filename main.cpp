@@ -10,7 +10,7 @@ void Special(int key, int x, int y);
 
 GameFramework gameframework;
 
-GLuint VAO, VBO_position, VBO_color;
+GLuint VAO, VBO_position, VBO_normal;
 
 objRead obj;
 
@@ -62,11 +62,17 @@ void InitBuffer()
 	glBufferData(GL_ARRAY_BUFFER, obj.outvertex.size() * sizeof(glm::vec3),&obj.outvertex[0], GL_STATIC_DRAW);	//--- vertex positions 데이터 입력
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);		//--- 좌표값을 attribute 인덱스 0번에 명시한다: 버텍스 당 3* float
 	glEnableVertexAttribArray(0);												//--- attribute 인덱스 0번을 사용가능하게 함
+
+	glGenBuffers(1, &VBO_normal);												//--- VBO position 객체 생성
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_normal);								//--- vertex positions 저장을 위한 VBO 바인딩
+	glBufferData(GL_ARRAY_BUFFER, obj.outnormal.size() * sizeof(glm::vec3), &obj.outnormal[0], GL_STATIC_DRAW);	//--- vertex positions 데이터 입력
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);		//--- 좌표값을 attribute 인덱스 0번에 명시한다: 버텍스 당 3* float
+	glEnableVertexAttribArray(0);
 }
 
 GLvoid drawScene()
 {
-	GLfloat rColor = 0.8f, gColor = 0.8f, bColor = 0.8f;
+	GLfloat rColor = 0.1f, gColor = 0.1f, bColor = 0.1f;
 
 	glClearColor(rColor, gColor, bColor, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -79,15 +85,7 @@ GLvoid drawScene()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glUseProgram(shaderProgramID);
-	//glm::mat4 model = glm::mat4(1.0f);
-
-	//--- 적용할 모델링 변환 행렬 만들기
-	//model = glm::translate(model, glm::vec3(0.1f, 0.5f, 0.0f)); //--- model 행렬에 이동 변환 적용
-	//--- 세이더 프로그램에서 modelTransform 변수 위치 가져오기
-	//unsigned int modelLocation = glGetUniformLocation(shaderProgramID, "modelTransform");
-	//--- modelTransform 변수에 변환 값 적용하기
-	//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
-
+	
 	glm::mat4 view = glm::mat4(1.0f);
 	view = glm::lookAt(cameraPos, cameraDirection, cameraUp);
 	unsigned int viewLocation = glGetUniformLocation(shaderProgramID, "view"); //--- 뷰잉 변환 설정
@@ -101,8 +99,19 @@ GLvoid drawScene()
 
 	
 	unsigned int modelLocation = glGetUniformLocation(shaderProgramID, "model");
-	//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(TR));
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(gameframework.player->Get_worldTR()));
+
+	unsigned int objColorLocation = glGetUniformLocation(shaderProgramID, "objColor");
+	glUniform3f(objColorLocation, 0.8,0.8,0.8);
+
+	unsigned int lightColorLocation = glGetUniformLocation(shaderProgramID, "lightColor");
+	glUniform3f(lightColorLocation, 1.0, 1.0, 1.0);
+
+	unsigned int lightPosLocation = glGetUniformLocation(shaderProgramID, "lightPos"); //--- lightPos 값 전달: (0.0, 0.0, 5.0);
+	glUniform3f(lightPosLocation, 0.0, 0.0, 5.0);
+
+	unsigned int viewPosLocation = glGetUniformLocation(shaderProgramID, "lightColor");
+	glUniform3f(viewPosLocation, cameraPos.x,cameraPos.y,cameraPos.z);
 
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, obj.outvertex.size());
@@ -132,9 +141,11 @@ void Keyboard(unsigned char key, int x, int y)
 		break;
 	case 'i': case 'I':
 		cameraPos[2] -= 0.2;
+		cameraDirection[2] -= 0.2;
 		break;
 	case 'k': case 'K':
 		cameraPos[2] += 0.2;
+		cameraDirection[2] += 0.2;
 		break;
 	case 'j': case 'J':
 		cameraPos[0] -= 0.2;
