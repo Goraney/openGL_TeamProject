@@ -138,15 +138,19 @@ void Keyboard(unsigned char key, int x, int y)
 		break;
 	case 'j': case 'J':
 		cameraPos[0] -= 0.2;
+		cameraDirection[0] -= 0.2;
 		break;
 	case 'l': case 'L':
 		cameraPos[0] += 0.2;
+		cameraDirection[0] += 0.2;
 		break;
 	case 'n': case 'N':
 		cameraPos[1] += 0.2;
+		cameraDirection[1] += 0.2;
 		break;
 	case 'm': case 'M':
 		cameraPos[1] -= 0.2;
+		cameraDirection[1] -= 0.2;
 		break;
 	}
 
