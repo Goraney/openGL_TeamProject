@@ -224,7 +224,7 @@ void Special(int key, int x, int y)
 
 void timer(int value)
 {
-	gameframework.scene->AnimateObjects();
+	gameframework.Update();
 	glutTimerFunc(TIMER_GAP, timer, 1);
 	glutPostRedisplay();
 }
