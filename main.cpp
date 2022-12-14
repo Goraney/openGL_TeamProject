@@ -35,7 +35,7 @@ void main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(WIDTH, HEIGHT);
-	glutCreateWindow("Example 6");
+	glutCreateWindow("TeamProject");
 
 	// 윈도우 초기화
 	glewExperimental = GL_TRUE;
