@@ -47,6 +47,15 @@ void GameFramework::AnimateObjects()
 	player->Animate();
 }
 
+void GameFramework::AddObject()
+{
+	if (scene->objects)
+	{
+		Object* bullet = new Object(player->world_Tr, player->look);
+		scene->objects->emplace_back(bullet);
+	}
+}
+
 void GameFramework::Update()
 {
 	ProcessInput();

@@ -15,6 +15,6 @@ public:
 
 public:
 	Player* player;
-	vector<Object*>* Objects;
+	vector<Object*>* objects;
 };
 

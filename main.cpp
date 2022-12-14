@@ -101,6 +101,15 @@ GLvoid drawScene()
 	unsigned int modelLocation = glGetUniformLocation(shaderProgramID, "model");
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(gameframework.player->Get_worldTR()));
 
+	if ((gameframework.scene->objects) && gameframework.scene->objects->size() != 0)
+	{
+		for (int i = 0; i < gameframework.scene->objects->size(); ++i)
+		{
+			unsigned int bulletLocation = glGetUniformLocation(shaderProgramID, "model");
+			glUniformMatrix4fv(bulletLocation, 1, GL_FALSE, glm::value_ptr(gameframework.scene->objects->at(i)->Get_worldTR()));
+		}
+	}
+
 	unsigned int objColorLocation = glGetUniformLocation(shaderProgramID, "objColor");
 	glUniform3f(objColorLocation, 0.8,0.8,0.8);
 
@@ -128,16 +137,16 @@ void Keyboard(unsigned char key, int x, int y)
 {
 	switch (key) {
 	case 'w': case 'W': //Advance
-		gameframework.player->Translate(1.0f);
+		gameframework.player->Translate(0.5f);
 		break;
 	case 's': case 'S': //backwards
-		gameframework.player->Translate(-1.0f);
+		gameframework.player->Translate(-0.5f);
 		break;
 	case 'a': case 'A': //Rotate left
-		gameframework.player->Rotate(glm::vec3(0.0f, 1.0f, 0.0f), 20);
+		gameframework.player->Rotate(glm::vec3(0.0f, 1.0f, 0.0f), 10);
 		break;
 	case 'd': case 'D': //Rotate right
-		gameframework.player->Rotate(glm::vec3(0.0f, 1.0f, 0.0f), -20);
+		gameframework.player->Rotate(glm::vec3(0.0f, 1.0f, 0.0f), -10);
 		break;
 	case 'i': case 'I':
 		cameraPos[2] -= 0.2;
@@ -163,6 +172,8 @@ void Keyboard(unsigned char key, int x, int y)
 		cameraPos[1] -= 0.2;
 		cameraDirection[1] -= 0.2;
 		break;
+	case 'v': case 'V':
+		gameframework.AddObject();
 	}
 
 	glutPostRedisplay();

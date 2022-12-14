@@ -15,6 +15,9 @@ public:
 
 	void ProcessInput();
 	void AnimateObjects();
+
+	void AddObject();
+
 	void Update();
 
 public:

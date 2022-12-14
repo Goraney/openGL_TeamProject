@@ -2,8 +2,8 @@
 
 Object::Object()
 {
-	world_Ry = glm::mat4(1.0);
 	world_Tr = glm::mat4(1.0);
+	world_Ry = glm::mat4(1.0);
 	
 	position = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 	right = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
@@ -12,6 +12,14 @@ Object::Object()
 
 
 
+}
+
+Object::Object(glm::mat4 position, glm::vec4 look)
+{
+	world_Tr = position;
+	world_Ry = glm::mat4(1.0);
+
+	this->look = look;
 }
 
 Object::~Object()
@@ -39,7 +47,7 @@ glm::mat4 Object::Get_worldTR()
 
 void Object::Move()
 {
-
+	
 }
 
 void Object::Animate()
@@ -57,6 +65,11 @@ Player::Player()
 Player::~Player()
 {
 
+}
+
+void Player::Fire()
+{
+	
 }
 
 void Player::Animate()

@@ -5,6 +5,7 @@ class Object
 {
 public:
 	Object();
+	Object(glm::mat4 position, glm::vec4 look);
 	~Object();
 
 	virtual void Rotate(glm::vec3 axis, float angle);
@@ -35,6 +36,8 @@ public:
 
 	//virtual void Rotate(glm::vec3 axis, float angle);
 	//virtual void Move();
+
+	void Fire();
 
 	virtual void Animate();
 };

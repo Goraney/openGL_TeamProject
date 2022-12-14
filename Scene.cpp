@@ -2,7 +2,7 @@
 
 Scene::Scene()
 {
-
+	objects = new vector<Object*>;
 }
 
 Scene::~Scene()
@@ -27,5 +27,11 @@ void Scene::ProcessInput()
 
 void Scene::AnimateObjects()
 {
-
+	if ((objects) && objects->size() != 0)
+	{
+		for (int i = 0; i != objects->size(); ++i)
+		{
+			objects->at(i)->Translate(2.0f);
+		}
+	}
 }
