@@ -2,17 +2,20 @@
 #include "GameFramework.h"
 #include "ObjReader.h"
 
+#define TIMER_GAP 30
+
 void InitBuffer();
 GLvoid drawScene();
 GLvoid Reshape(int w, int h);
 void Keyboard(unsigned char key, int x, int y);
 void Special(int key, int x, int y);
+void timer(int value);
 
 GameFramework gameframework;
 
-GLuint VAO, VBO_position, VBO_normal;
+GLuint VAO, VAO2, VBO_position, VBO_normal;
 
-objRead obj;
+objRead obj, obj2;
 
 int polygon_mode = 1;
 
@@ -23,6 +26,7 @@ glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 void main(int argc, char** argv)
 {
 	obj.loadObj_normalize_center("pyramid.obj");
+	obj2.loadObj_normalize_center("sphere.obj");
 
 	gameframework.OnCreate();
 
@@ -47,6 +51,7 @@ void main(int argc, char** argv)
 	glutKeyboardFunc(Keyboard);
 	glutSpecialFunc(Special);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glutTimerFunc(TIMER_GAP, timer, 1);
 
 	// 메인 루프
 	glutMainLoop();
@@ -66,6 +71,21 @@ void InitBuffer()
 	glGenBuffers(1, &VBO_normal);												//--- VBO position 객체 생성
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_normal);								//--- vertex positions 저장을 위한 VBO 바인딩
 	glBufferData(GL_ARRAY_BUFFER, obj.outnormal.size() * sizeof(glm::vec3), &obj.outnormal[0], GL_STATIC_DRAW);	//--- vertex positions 데이터 입력
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);		//--- 좌표값을 attribute 인덱스 0번에 명시한다: 버텍스 당 3* float
+	glEnableVertexAttribArray(0);
+
+	glGenVertexArrays(1, &VAO2);			//--- VAO 객체 생성
+	glBindVertexArray(VAO2);				//--- 사용할 VAO 바인딩
+
+	glGenBuffers(1, &VBO_position);												//--- VBO position 객체 생성
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_position);								//--- vertex positions 저장을 위한 VBO 바인딩
+	glBufferData(GL_ARRAY_BUFFER, obj2.outvertex.size() * sizeof(glm::vec3), &obj2.outvertex[0], GL_STATIC_DRAW);	//--- vertex positions 데이터 입력
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);		//--- 좌표값을 attribute 인덱스 0번에 명시한다: 버텍스 당 3* float
+	glEnableVertexAttribArray(0);												//--- attribute 인덱스 0번을 사용가능하게 함
+
+	glGenBuffers(1, &VBO_normal);												//--- VBO position 객체 생성
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_normal);								//--- vertex positions 저장을 위한 VBO 바인딩
+	glBufferData(GL_ARRAY_BUFFER, obj2.outnormal.size() * sizeof(glm::vec3), &obj2.outnormal[0], GL_STATIC_DRAW);	//--- vertex positions 데이터 입력
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);		//--- 좌표값을 attribute 인덱스 0번에 명시한다: 버텍스 당 3* float
 	glEnableVertexAttribArray(0);
 }
@@ -101,15 +121,6 @@ GLvoid drawScene()
 	unsigned int modelLocation = glGetUniformLocation(shaderProgramID, "model");
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(gameframework.player->Get_worldTR()));
 
-	if ((gameframework.scene->objects) && gameframework.scene->objects->size() != 0)
-	{
-		for (int i = 0; i < gameframework.scene->objects->size(); ++i)
-		{
-			unsigned int bulletLocation = glGetUniformLocation(shaderProgramID, "model");
-			glUniformMatrix4fv(bulletLocation, 1, GL_FALSE, glm::value_ptr(gameframework.scene->objects->at(i)->Get_worldTR()));
-		}
-	}
-
 	unsigned int objColorLocation = glGetUniformLocation(shaderProgramID, "objColor");
 	glUniform3f(objColorLocation, 0.8,0.8,0.8);
 
@@ -124,6 +135,18 @@ GLvoid drawScene()
 
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, obj.outvertex.size());
+
+	if ((gameframework.scene->objects) && gameframework.scene->objects->size() != 0)
+	{
+		for (int i = 0; i < gameframework.scene->objects->size(); ++i)
+		{
+			unsigned int bulletLocation = glGetUniformLocation(shaderProgramID, "model");
+			glUniformMatrix4fv(bulletLocation, 1, GL_FALSE, glm::value_ptr(gameframework.scene->objects->at(i)->Get_bulletTR()));
+
+			glBindVertexArray(VAO2);
+			glDrawArrays(GL_TRIANGLES, 0, obj2.outvertex.size());
+		}
+	}
 
 	glutSwapBuffers();
 }
@@ -196,5 +219,12 @@ void Special(int key, int x, int y)
 		break;
 	}
 
+	glutPostRedisplay();
+}
+
+void timer(int value)
+{
+	gameframework.scene->AnimateObjects();
+	glutTimerFunc(TIMER_GAP, timer, 1);
 	glutPostRedisplay();
 }

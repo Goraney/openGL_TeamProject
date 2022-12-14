@@ -31,7 +31,7 @@ void Scene::AnimateObjects()
 	{
 		for (int i = 0; i != objects->size(); ++i)
 		{
-			objects->at(i)->Translate(2.0f);
+			objects->at(i)->Translate(0.5f);
 		}
 	}
 }

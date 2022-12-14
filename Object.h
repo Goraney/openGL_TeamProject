@@ -11,6 +11,7 @@ public:
 	virtual void Rotate(glm::vec3 axis, float angle);
 	virtual void Translate(float speed);
 	virtual glm::mat4 Get_worldTR();
+	virtual glm::mat4 Get_bulletTR();
 	virtual void Move();
 
 	virtual void Animate();

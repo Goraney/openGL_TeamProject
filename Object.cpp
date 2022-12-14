@@ -45,6 +45,13 @@ glm::mat4 Object::Get_worldTR()
 	return world_Tr * world_Ry;
 }
 
+glm::mat4 Object::Get_bulletTR()
+{
+	glm::mat4 Sc = glm::mat4(1.0);
+	Sc = glm::scale(Sc, glm::vec3(0.2, 0.2, 0.2));
+	return world_Tr * world_Ry * Sc;
+}
+
 void Object::Move()
 {
 	
