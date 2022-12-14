@@ -8,7 +8,7 @@ public:
 	~Object();
 
 	virtual void Rotate(glm::vec3 axis, float angle);
-	virtual void Translate(glm::vec3 translate);
+	virtual void Translate(float speed);
 	virtual glm::mat4 Get_worldTR();
 	virtual void Move();
 
@@ -20,10 +20,10 @@ public:
 	glm::mat4 world_Ry;
 	glm::mat4 world_Tr;
 
-	//glm::vec4 position;
-	//glm::vec4 look;
-	//glm::vec4 up;
-	//glm::vec4 right;
+	glm::vec4 position;
+	glm::vec4 look;
+	glm::vec4 up;
+	glm::vec4 right;
 
 };
 

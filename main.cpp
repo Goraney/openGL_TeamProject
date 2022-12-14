@@ -128,10 +128,10 @@ void Keyboard(unsigned char key, int x, int y)
 {
 	switch (key) {
 	case 'w': case 'W': //Advance
-		gameframework.player->Translate(glm::vec3(0.0f, 0.0f, -0.5f));
+		gameframework.player->Translate(1.0f);
 		break;
 	case 's': case 'S': //backwards
-		gameframework.player->Translate(glm::vec3(0.0f, 0.0f, 0.5f));
+		gameframework.player->Translate(-1.0f);
 		break;
 	case 'a': case 'A': //Rotate left
 		gameframework.player->Rotate(glm::vec3(0.0f, 1.0f, 0.0f), 20);
